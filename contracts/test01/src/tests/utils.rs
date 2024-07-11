@@ -2,7 +2,7 @@ use crate::contract::{execute, instantiate, query};
 use crate::msg::InstantiateMsg;
 use classic_bindings::TerraQuery;
 use cosmwasm_std::{Addr, Empty, Uint128};
-use cw_multi_test::{custom_app, BasicApp, Contract, ContractWrapper, Executor};
+use cw_multi_test::{AppBuilder, BasicApp, Contract, ContractWrapper, Executor};
 
 const GOVERNANCE: &str = "governance";
 const TERRA: &str = "TERRA";
@@ -10,7 +10,7 @@ const TERRA: &str = "TERRA";
 pub type MyApp = BasicApp<Empty, TerraQuery>;
 
 pub fn my_app() -> MyApp {
-    custom_app::<Empty, TerraQuery, _>(|_, _, _| {})
+    AppBuilder::new_custom().build(|_, _, _| {})
 }
 
 /// Convenient utility function for creating addresses in tests.
