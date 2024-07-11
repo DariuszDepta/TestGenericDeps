@@ -1,7 +1,7 @@
 use crate::contract::{execute, instantiate, query};
 use crate::msg::InstantiateMsg;
 use classic_bindings::TerraQuery;
-use cosmwasm_std::{attr, Addr, Empty, Uint128};
+use cosmwasm_std::{Addr, Empty, Uint128};
 use cw_multi_test::{custom_app, BasicApp, Contract, ContractWrapper, Executor};
 
 const GOVERNANCE: &str = "governance";
@@ -85,26 +85,28 @@ pub fn init_token_contract(app: &mut MyApp) -> Addr {
     .unwrap()
 }
 
-pub fn mint_some_tokens(
+pub fn mint_tokens(
     app: &mut MyApp,
     owner: &Addr,
     token_contract_addr: &Addr,
     amount: u128,
     recipient: &Addr,
 ) {
-    let amount = Uint128::new(amount);
     let msg = cw20::Cw20ExecuteMsg::Mint {
         recipient: recipient.to_string(),
-        amount,
+        amount: Uint128::new(amount),
     };
-    let res = app
-        .execute_contract(owner.clone(), token_contract_addr.clone(), &msg, &[])
+    app.execute_contract(owner.clone(), token_contract_addr.clone(), &msg, &[])
         .unwrap();
+}
 
-    assert_eq!(res.events[1].attributes[1], attr("action", "mint"));
-    assert_eq!(
-        res.events[1].attributes[2],
-        attr("to", recipient.to_string())
-    );
-    assert_eq!(res.events[1].attributes[3], attr("amount", amount));
+pub fn query_tokens(app: &MyApp, token_contract_addr: &Addr, address: &Addr) -> u128 {
+    let msg = cw20::Cw20QueryMsg::Balance {
+        address: address.to_string(),
+    };
+    let response: cw20::BalanceResponse = app
+        .wrap()
+        .query_wasm_smart(token_contract_addr, &msg)
+        .unwrap();
+    response.balance.u128()
 }
