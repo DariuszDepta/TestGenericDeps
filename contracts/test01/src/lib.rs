@@ -1,8 +1,8 @@
 pub mod contract;
+pub mod error;
 pub mod msg;
 pub mod query;
 pub mod state;
-pub mod error;
 
-#[cfg(any(test, feature = "tests"))]
+#[cfg(test)]
 mod tests;
