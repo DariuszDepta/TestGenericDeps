@@ -1,12 +1,12 @@
-use classic_bindings::TerraQuery;
-use cosmwasm_std::{
-    entry_point, to_json_binary, Binary, Deps, DepsMut, Empty, Env, MessageInfo, Response, StdResult
-};
-
 use crate::error::ContractResponse;
 use crate::msg::{InstantiateMsg, QueryMsg};
 use crate::query::query_config;
 use crate::state::instantiate_contract;
+use classic_bindings::TerraQuery;
+use cosmwasm_std::{
+    entry_point, to_json_binary, Binary, Deps, DepsMut, Empty, Env, MessageInfo, Response,
+    StdResult,
+};
 
 #[entry_point]
 pub fn instantiate(
@@ -23,7 +23,7 @@ pub fn execute(
     _deps: DepsMut<TerraQuery>,
     _env: Env,
     _info: MessageInfo,
-    _: Empty
+    _: Empty,
 ) -> ContractResponse {
     Ok(Response::new())
 }
